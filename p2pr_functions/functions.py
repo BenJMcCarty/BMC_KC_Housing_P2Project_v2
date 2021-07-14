@@ -378,7 +378,7 @@ def report_df(dataframe):
 
     report_df = pd.concat([report_df, dataframe.describe().T], axis=1)
 
-    display(dataframe.shape)
+    print(dataframe.shape)
 
     return report_df
 
