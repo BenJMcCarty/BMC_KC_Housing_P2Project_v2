@@ -6,8 +6,6 @@
 
 #################################################################################################
 
-## Check using z-score - sensitive to outliers
-
 def find_outliers_z(data):
     """Detects outliers using the Z-score>3 cutoff.
     Returns a boolean Series where True=outlier
@@ -30,8 +28,6 @@ def find_outliers_z(data):
     idx_outliers = zFP > 3
     return idx_outliers
 
-###
-## Check using IQR - less sensitive to outliers
 
 def find_outliers_IQR(data):
     """Determines outliers using the 1.5*IQR thresholds.
