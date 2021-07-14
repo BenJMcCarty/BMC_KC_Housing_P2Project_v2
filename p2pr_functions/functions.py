@@ -378,7 +378,7 @@ def report_df(dataframe):
 
     return report_df
 
-def eval_perf_train(model, X_train, y_train, X_test, y_test):
+def eval_perf_train(model, X_train=None, y_train=None, X_test=None, y_test=None):
     """Evaluates the performance of a model on training data
 
     Metrics:
@@ -395,18 +395,35 @@ def eval_perf_train(model, X_train, y_train, X_test, y_test):
     import numpy as np
     from sklearn import metrics
 
-    y_hat_train = model.predict(X_train)
-    
-    train_mae = metrics.mean_absolute_error(y_train, y_hat_train)
-    train_mse = metrics.mean_squared_error(y_train, y_hat_train)
-    train_rmse = np.sqrt(metrics.mean_squared_error(y_train, y_hat_train))
-    train_r = metrics.r2_score(y_train, y_hat_train)
+    if X_train != None and y_train != None:
 
-    print('Evaluating Performance on Training Data:\n')
-    print(f'Mean Absolute Error: {train_mae:,.2f}')
-    print(f'Mean Squared Error:  {train_mse:,.2f}\n')
-    print(f'Root Mean Squared Error: {train_rmse:,.2f}')
-    print(f'R-Square Value: {round(train_r,2)}')
+        y_hat_train = model.predict(X_train)
+        
+        train_mae = metrics.mean_absolute_error(y_train, y_hat_train)
+        train_mse = metrics.mean_squared_error(y_train, y_hat_train)
+        train_rmse = np.sqrt(metrics.mean_squared_error(y_train, y_hat_train))
+        train_r = metrics.r2_score(y_train, y_hat_train)
+
+        print('Evaluating Performance on Training Data:\n')
+        print(f'Train Mean Absolute Error: {train_mae:,.2f}')
+        print(f'Train Mean Squared Error:  {train_mse:,.2f}\n')
+        print(f'Train Root Mean Squared Error: {train_rmse:,.2f}')
+        print(f'Train R-Square Value: {round(train_r,2)}')
+
+    if X_test != None and y_test != None:
+        
+        y_hat_test = model.predict(X_test)
+
+        test_mae = metrics.mean_absolute_error(y_test, y_hat_test)
+        test_mse = metrics.mean_squared_error(y_test, y_hat_test)
+        test_rmse = np.sqrt(metrics.mean_squared_error(y_test, y_hat_test))
+        test_r = metrics.r2_score(y_test, y_hat_test)
+
+        print('Evaluating Performance on Testing Data:\n')
+        print(f'Test Mean Absolute Error: {test_mae:,.2f}')
+        print(f'Test Mean Squared Error:  {test_mse:,.2f}\n')
+        print(f'Test Root Mean Squared Error: {test_rmse:,.2f}')
+        print(f'Test R-Square Value: {round(test_r,2)}')
 
 def eval_perf_test(model, X_test, y_test):
     """Evaluate the performance of a given model on the testing data
