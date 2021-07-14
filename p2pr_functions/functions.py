@@ -358,4 +358,28 @@ def review_model(model):
     
     return
 
+def report_df(dataframe):
+    """Creates a summary of a given dataframe per column, including:
+        * Datatypes
+        * Number of unique values
+        * Number of NaN values
+        * Percent of NaN values
+
+    Args:
+        dataframe ([pd.DataFrame): Source DataFrame for summary
+
+    Returns:
+        pd.DataFrame: DataFrame containing results of summary
+    """
+
+    import pandas as pd
+
+    report_df = pd.DataFrame({'datatypes':dataframe.dtypes,'num_unique':dataframe.nunique(),'null_sum':dataframe.isna().sum(),'null_pct':dataframe.isna().sum()/len(dataframe)})
+
+    report_df = pd.concat([report_df, dataframe.describe().T], axis=1)
+
+    display(dataframe.shape)
+
+    return report_df
+
 ### End ###
