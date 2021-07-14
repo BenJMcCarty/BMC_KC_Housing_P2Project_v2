@@ -21,7 +21,7 @@ def find_outliers_z(data):
         pd.Series: Boolean index indicating "True" if a value is an outlier
     """
     import numpy as np
-    import scipy as stats
+    from scipy import stats
     import matplotlib.pyplot as plt
     import pandas as pd
 
@@ -381,5 +381,60 @@ def report_df(dataframe):
     print(dataframe.shape)
 
     return report_df
+
+def eval_perf_train(model, X_train, y_train, X_test, y_test):
+    """Evaluates the performance of a model on training data
+
+    Metrics:
+    Mean Absolute Error (MAE)
+    Mean Squared Error(MSE)
+    Root Mean Squared Error (RMSE)
+    R^2
+
+    Args:
+        model (fit & trasformed model): model created via Statsmodels or SKLearn
+        X_train (2D array): X_train data from train/test split
+        y_train (1D array): y_train data from train/test split
+    """
+    import numpy as np
+    from sklearn import metrics
+
+    y_hat_train = model.predict(X_train)
+    
+    train_mae = metrics.mean_absolute_error(y_train, y_hat_train)
+    train_mse = metrics.mean_squared_error(y_train, y_hat_train)
+    train_rmse = np.sqrt(metrics.mean_squared_error(y_train, y_hat_train))
+    train_r = metrics.r2_score(y_train, y_hat_train)
+
+    print('Evaluating Performance on Training Data:\n')
+    print(f'Mean Absolute Error: {train_mae:,.2f}')
+    print(f'Mean Squared Error:  {train_mse:,.2f}\n')
+    print(f'Root Mean Squared Error: {train_rmse:,.2f}')
+    print(f'R-Square Value: {round(train_r,2)}')
+
+def eval_perf_test(model, X_test, y_test):
+    """Evaluate the performance of a given model on the testing data
+
+    Args:
+        model (transformed model): model created via Statsmodels or SKLearn
+        X_test (2D array): X_test data from train/test split
+        y_test (1D array): y_train data from train/test split
+    """
+
+    import numpy as np
+    from sklearn import metrics
+
+    y_hat_test = model.predict(X_test)
+
+    test_mae = metrics.mean_absolute_error(y_test, y_hat_test)
+    test_mse = metrics.mean_squared_error(y_test, y_hat_test)
+    test_rmse = np.sqrt(metrics.mean_squared_error(y_test, y_hat_test))
+    test_r = metrics.r2_score(y_test, y_hat_test)
+
+    print('Evaluating Performance on Training Data:\n')
+    print(f'Mean Absolute Error: {test_mae:,.2f}')
+    print(f'Mean Squared Error:  {test_mse:,.2f}\n')
+    print(f'Root Mean Squared Error: {test_rmse:,.2f}')
+    print(f'R-Square Value: {round(test_r,2)}')
 
 ### End ###
