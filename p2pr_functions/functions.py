@@ -1,4 +1,8 @@
-## Modularizing functions used in P2Pr notebook
+## Name: Functions
+
+## Description: functions created for purposes of Phase 2 Project (revisited)
+
+## By Ben McCarty (bmccarty505@gmail.com)
 
 #################################################################################################
 
