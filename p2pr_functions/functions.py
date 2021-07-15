@@ -450,26 +450,102 @@ def eval_perf_test(model, X_test, y_test):
     print(f'Test Root Mean Squared Error: {test_rmse:,.2f}')
     print(f'Test R-Square Value: {round(test_r,2)}')
 
-## To be updated later:
 
-# def plot_coefs(data, xlabel, title, style='seaborn-dark',kind="bar", ):
-#     '''
+def plot_coefs(data, x_label, y_label, title, kind = 'barh', style = 'seaborn-darkgrid',
+               figsize = (10, 8)):
+    """Generates plots to visualize model coefficients.
 
-#     '''
+    Args:
+        data (pd.Series): Model coefficients as a Pandas Series
+        x_label (str): Label for x-axis
+        y_label (str): Label for y-axis
+        title (str): Visualization title
+        kind (str, optional): [description]. Defaults to 'barh'.
+        style (str, optional): [description]. Defaults to 'seaborn-darkgrid'.
+        figsize (tuple, optional): [description]. Defaults to (10, 8).
+
+    Returns:
+        Matplotlib.pyplt ax: generated visualization
+    """
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import matplotlib as mpl
+
+    with plt.style.context(style):
     
-#     with plt.style.context('seaborn-dark'):
+        ax = data.sort_index(ascending=False).plot(kind=kind,
+                                                      figsize = figsize,
+                                                      rot=45)
+              
+        if kind == 'barh':
+            
+            ax.xaxis.set_major_formatter(mpl.ticker.StrMethodFormatter('${x:,.0f}'))
+            ax.set_yticklabels(ax.get_yticklabels(), ha='right')
+            ax.axvline(color='k')
+            ax.set(xlabel = x_label, ylabel = y_label, title = title)
+            
+        else:
+            ax.yaxis.set_major_formatter(mpl.ticker.StrMethodFormatter('${x:,.0f}'))
+            ax.set_xticklabels(ax.get_xticklabels(), ha='right')
+            ax.axhline(color='k')
+            ax.set(xlabel = x_label, ylabel = y_label, title = title)
+
+    return ax
+
+
+def eval_perf_total(model, X_train, y_train, X_test, y_test):
+    """Evaluates the performance of a model on training data
+
+    Metrics:
+    Mean Absolute Error (MAE)
+    Mean Squared Error(MSE)
+    Root Mean Squared Error (RMSE)
+    R^2
+
+    Args:
+        model (fit & trasformed model): model created via Statsmodels or SKLearn
+        X_train (2D array): X_train data from train/test split
+        y_train (1D array): y_train data from train/test split
+    """
+    import numpy as np
+    from sklearn import metrics
+
+    y_hat_train = model.predict(X_train)
+    y_hat_test = model.predict(X_test)
     
-#         ax = no_zips.sort_index(ascending=False).plot(kind="bar", figsize = (8, 8), rot=45)
+    train_mae = metrics.mean_absolute_error(y_train, y_hat_train)
+    train_mse = metrics.mean_squared_error(y_train, y_hat_train)
+    train_rmse = np.sqrt(metrics.mean_squared_error(y_train, y_hat_train))
+    train_r = metrics.r2_score(y_train, y_hat_train)
 
-#         ax.yaxis.set_major_formatter(mpl.ticker.StrMethodFormatter('${x:,.0f}'))
+    print('Evaluating Performance on Training Data:\n')
+    print(f'    Train Mean Absolute Error: {train_mae:,.2f}')
+    print(f'    Train Mean Squared Error:  {train_mse:,.2f}\n')
+    print(f'Train Root Mean Squared Error: {train_rmse:,.2f}')
+    print(f'Train R-Square Value: {round(train_r,2)}')
 
-#         ax.set(xlabel='Coefficients ($)', title='House Zip Code Effects on Price')
+    print('\n'+'---'*25+'\n')
 
-#         ax.set_xticklabels(ax.get_xticklabels(), ha='right')
+    test_mae = metrics.mean_absolute_error(y_test, y_hat_test)
+    test_mse = metrics.mean_squared_error(y_test, y_hat_test)
+    test_rmse = np.sqrt(metrics.mean_squared_error(y_test, y_hat_test))
+    test_r = metrics.r2_score(y_test, y_hat_test)
 
-#         ax.axhline(color='k')
+    print('Evaluating Performance on Testing Data:\n')
+    print(f'    Test Mean Absolute Error: {test_mae:,.2f}')
+    print(f'    Test Mean Squared Error:  {test_mse:,.2f}\n')
+    print(f'Test Root Mean Squared Error: {test_rmse:,.2f}')
+    print(f'Test R-Square Value: {round(test_r,2)}')
 
-#     return ax;
-        
+
+def get_model_coefs(model, index):
+
+    import pandas as pd
+
+    model_coefs = pd.Series(model['regressor'].coef_, index=index)
+    model_coefs['intercept'] = model['regressor'].intercept_
+    
+    return model_coefs
+
 
 ### End ###
