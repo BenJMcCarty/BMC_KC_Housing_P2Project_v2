@@ -100,7 +100,7 @@ def filter_outliers(data):
  
     cleaned = data[~idx_out].copy()
 
-    print(f'There were {idx_out.sum()} outliers.')
+    # print(f'There were {idx_out.sum()} outliers.')
     
     return cleaned
 
