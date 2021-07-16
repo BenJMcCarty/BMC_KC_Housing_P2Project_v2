@@ -473,9 +473,7 @@ def plot_coefs(data, x_label, y_label, title, kind = 'barh', style = 'seaborn-da
 
     with plt.style.context(style):
     
-        ax = data.sort_index(ascending=False).plot(kind=kind,
-                                                      figsize = figsize,
-                                                      rot=45)
+        ax = data.plot(kind=kind, figsize = figsize, rot=45)
               
         if kind == 'barh':
             
