@@ -1,10 +1,30 @@
-## Name: Functions
+'''Name: Functions
 
-## Description: functions created for purposes of Phase 2 Project (revisited)
+Description: functions created for purposes of Phase 2 Project (revisited)
 
-## By Ben McCarty (bmccarty505@gmail.com)
+By Ben McCarty (bmccarty505@gmail.com)'''
 
-#################################################################################################
+##### -------------------- Imports -------------------- #####
+
+import numpy as np
+import pandas as pd
+from scipy import stats
+
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import seaborn as sns
+
+import statsmodels.formula.api as smf
+import statsmodels.api as sms
+from sklearn import metrics
+
+##### -------------------- Functions: Used -------------------- #####
+
+## ID functions used in project and move to this point
+
+##### -------------------- Functions: Unused -------------------- #####
+
+## ID functions not used in project and move to this point
 
 def find_outliers_z(data):
     """Detects outliers using the Z-score>3 cutoff.
@@ -18,16 +38,11 @@ def find_outliers_z(data):
     Returns:
         pd.Series: Boolean index indicating "True" if a value is an outlier
     """
-    import numpy as np
-    from scipy import stats
-    import matplotlib.pyplot as plt
-    import pandas as pd
 
     zFP = np.abs(stats.zscore(data))
     zFP = pd.Series(zFP, index=data.index)
     idx_outliers = zFP > 3
     return idx_outliers
-
 
 def find_outliers_IQR(data):
     """Determines outliers using the 1.5*IQR thresholds.
@@ -48,7 +63,6 @@ def find_outliers_IQR(data):
     idx_outliers =(data < (q1-thresh)) | (data > (q3+thresh))
     return idx_outliers
 
-###
 def feature_vis(data, x, y = 'price', categorical = False, kde = True):
     """
     Prints the selected Series for reference.
@@ -69,8 +83,6 @@ def feature_vis(data, x, y = 'price', categorical = False, kde = True):
     Returns:
         N/a
     """
-    import matplotlib.pyplot as plt
-    import seaborn as sns
 
     print(data[x].value_counts().sort_index())
       
@@ -84,7 +96,6 @@ def feature_vis(data, x, y = 'price', categorical = False, kde = True):
     
     return
 
-###
 def filter_outliers(data):
     """Filters outliers from given data via the "find_outliers_IQR" function and saves filtered
     values to a new DataFrame
@@ -104,7 +115,6 @@ def filter_outliers(data):
     
     return cleaned
 
-###
 def show_cleaned_vis(data, x, y = 'price', categorical = False, kde = True):
     """Combines helper functions to filter outliers and to create the feature 
         visualizations.
@@ -121,9 +131,6 @@ def show_cleaned_vis(data, x, y = 'price', categorical = False, kde = True):
     Returns:
         None
     """
-    
-    import matplotlib.pyplot as plt
-    import seaborn as sns
 
     ### Filter outliers first
     
@@ -145,7 +152,6 @@ def show_cleaned_vis(data, x, y = 'price', categorical = False, kde = True):
     
     return #df_cleaned
 
-###
 def ttest_review(sample_1, sample_2, alpha=.05):
     """Runs a t-test on two samples from the same independent variable; prints whether or not they are significant;
     and returns p-value as a variable called "p-value."
@@ -157,8 +163,7 @@ def ttest_review(sample_1, sample_2, alpha=.05):
 
     Returns:
         int: Resulting p-value for reference
-    """    
-    import scipy as stats
+    """
 
     result = stats.ttest_ind(sample_1, sample_2)
     crit_val, p_val = result
@@ -173,7 +178,6 @@ def ttest_review(sample_1, sample_2, alpha=.05):
     
     return p_val
 
-###
 def corr_val(df,figsize=(15,15),cmap="OrRd",):
     """Generates a Seaborn heatmap of correlations between each independent variable.
 
@@ -185,9 +189,6 @@ def corr_val(df,figsize=(15,15),cmap="OrRd",):
     Returns:
         fig, ax: resulting visualization
     """
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import seaborn as sns
 
     # Calculate correlations
     corr = df.corr()
@@ -204,7 +205,6 @@ def corr_val(df,figsize=(15,15),cmap="OrRd",):
     sns.heatmap(corr, annot=True,cmap="Reds",mask=mask)
     return fig, ax
 
-###
 def diagnose_model(model, figsize=(10,5)):
     """ ---
     
@@ -222,9 +222,6 @@ def diagnose_model(model, figsize=(10,5)):
     ---
     
     """
-    import matplotlib.pyplot as plt
-    import statsmodels.formula.api as smf
-    import statsmodels.api as sms
 
     print(model.summary())
     
@@ -242,7 +239,6 @@ def diagnose_model(model, figsize=(10,5)):
     
     return
 
-###
 def create_model(data, cont, cat, target):
     """Creates a linear regression model using Statsmodels OLS and 
     evaluates assumptions of linearity by plotting residuals for homoscedasticity
@@ -256,7 +252,6 @@ def create_model(data, cont, cat, target):
     Returns:
         model: Statsmodels OLS Linear Regression model
     """    
-    import statsmodels.formula.api as smf
 
     cont_features = '+'.join(cont)
 
@@ -272,7 +267,6 @@ def create_model(data, cont, cat, target):
     
     return model
 
-###
 def plot_param_coef(model, kind = 'barh', figsize = (10,5)):
     """Plotting a figure to visualize parameter coefficients
 
@@ -281,7 +275,6 @@ def plot_param_coef(model, kind = 'barh', figsize = (10,5)):
         kind (str, optional): Plot type. Defaults to 'barh'.
         figsize (tuple, optional): Figure size. Defaults to (10,5).
     """
-    import matplotlib.pyplot as plt
  
     ## Getting coefficients as a Series
     params = model.params[1:]
@@ -298,7 +291,6 @@ def plot_param_coef(model, kind = 'barh', figsize = (10,5)):
     
     return
 
-###
 def plot_p_values(model, kind = 'barh', figsize = (10,5), alpha = .05):
     """Plots a figure to visualize parameter p-values exceeding stated alpha.
 
@@ -308,8 +300,6 @@ def plot_p_values(model, kind = 'barh', figsize = (10,5), alpha = .05):
         figsize (tuple, optional): Figure size. Defaults to (10,5).
         alpha (float, optional): Significance level (p-value). Defaults to .05.
     """   
-    
-    import matplotlib.pyplot as plt
 
     pv = model.pvalues[1:]
     pv_high = pv[pv > alpha]
@@ -330,14 +320,13 @@ def plot_p_values(model, kind = 'barh', figsize = (10,5), alpha = .05):
         plt.suptitle(f'P-Values Below {alpha}')        
 
     ## Not used; keeping just in case        
-#   else:
-#         print(f'There are no p-values above {alpha}.')
+    # else:
+        # print(f'There are no p-values above {alpha}.')
         
     plt.tight_layout()
     
     return
 
-###
 def review_model(model):
     """Combines earlier functions into one all-purpose function for reviewing
     model performance.
@@ -368,8 +357,6 @@ def report_df(dataframe):
         pd.DataFrame: DataFrame containing results of summary
     """
 
-    import pandas as pd
-
     report_df = pd.DataFrame({'datatypes':dataframe.dtypes,'num_unique':dataframe.nunique(),'null_sum':dataframe.isna().sum(),'null_pct':dataframe.isna().sum()/len(dataframe)})
 
     report_df = pd.concat([report_df, dataframe.describe().T], axis=1)
@@ -392,8 +379,6 @@ def eval_perf_train(model, X_train=None, y_train=None):
         X_train (2D array): X_train data from train/test split
         y_train (1D array): y_train data from train/test split
     """
-    import numpy as np
-    from sklearn import metrics
 
     # if X_train != None and y_train != None:
 
@@ -434,9 +419,6 @@ def eval_perf_test(model, X_test, y_test):
         y_test (1D array): y_train data from train/test split
     """
 
-    import numpy as np
-    from sklearn import metrics
-
     y_hat_test = model.predict(X_test)
 
     test_mae = metrics.mean_absolute_error(y_test, y_hat_test)
@@ -449,7 +431,6 @@ def eval_perf_test(model, X_test, y_test):
     print(f'Test Mean Squared Error:  {test_mse:,.2f}\n')
     print(f'Test Root Mean Squared Error: {test_rmse:,.2f}')
     print(f'Test R-Square Value: {round(test_r,2)}')
-
 
 def plot_coefs(data, x_label, y_label, title, kind = 'barh', style = 'seaborn-darkgrid',
                figsize = (10, 8)):
@@ -467,9 +448,6 @@ def plot_coefs(data, x_label, y_label, title, kind = 'barh', style = 'seaborn-da
     Returns:
         Matplotlib.pyplt ax: generated visualization
     """
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    import matplotlib as mpl
 
     with plt.style.context(style):
     
@@ -490,7 +468,6 @@ def plot_coefs(data, x_label, y_label, title, kind = 'barh', style = 'seaborn-da
 
     return ax
 
-
 def eval_perf_total(model, X_train, y_train, X_test, y_test):
     """Evaluates the performance of a model on training data
 
@@ -505,8 +482,6 @@ def eval_perf_total(model, X_train, y_train, X_test, y_test):
         X_train (2D array): X_train data from train/test split
         y_train (1D array): y_train data from train/test split
     """
-    import numpy as np
-    from sklearn import metrics
 
     y_hat_train = model.predict(X_train)
     y_hat_test = model.predict(X_test)
@@ -535,15 +510,11 @@ def eval_perf_total(model, X_train, y_train, X_test, y_test):
     print(f'Test Root Mean Squared Error: {test_rmse:,.2f}')
     print(f'Test R-Square Value: {round(test_r,2)}')
 
-
 def get_model_coefs(model, index):
-
-    import pandas as pd
 
     model_coefs = pd.Series(model['regressor'].coef_, index=index)
     model_coefs['intercept'] = model['regressor'].intercept_
     
     return model_coefs
-
 
 ### End ###
